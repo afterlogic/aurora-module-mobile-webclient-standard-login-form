@@ -4,9 +4,15 @@
 module.exports = function (oAppData) {
 	var
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
+		ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
 		
 		bAnonimUser = App.getUserRole() === Enums.UserRole.Anonymous
 	;
+	
+	if (!ModulesManager.isModuleAvailable('CoreMobileWebclient'))
+	{
+		return null;
+	}
 	
 	if (!App.isPublic() && bAnonimUser)
 	{
