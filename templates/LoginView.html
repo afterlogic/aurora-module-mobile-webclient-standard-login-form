@@ -1,71 +1,100 @@
 <div class="screen LoginLayout" style="display: none;">
-	<div class="views">
-		<!-- Your main view, should have "view-main" class -->
+	<div class="mdc-layout-grid">
+		<div class="mdc-layout-grid__inner">
+			<div class="mdc-layout-grid__cell">
+				
+				<!-- ko if: sCustomLogoUrl === '' --><span class="icon"></span><!-- /ko -->
+				<!-- ko if: sCustomLogoUrl !== '' --><img data-bind="attr: {'src': sCustomLogoUrl}"/><!-- /ko -->
+
+				<div class="mdc-typography--headline" data-bind="i18n: {'key': 'COREWEBCLIENT/HEADING_LOGIN'}"></div>
+
+				<form action="#" autocomplete="on" onsubmit="return false;" data-bind="command: loginCommand">
+
+					<ul class="mdc-list mdc-list--two-line">
+						<li class="mdc-list-item">
+							<label id="login-textfield" class="mdc-textfield" data-bind="css: {'mdc-textfield--invalid': shake()}">
+								<input tabindex="1" type="text" spellcheck="false" class="mdc-textfield__input"
+									data-bind="value: login, valueUpdate: 'afterkeydown'" />
+								<span class="mdc-textfield__label" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_LOGIN'}"></span>
+							</label>
+						</li>
+
+						<li class="mdc-list-item">
+							<label id="password-textfield" class="mdc-textfield" data-bind="css: {'mdc-textfield--invalid': shake()}">
+								<input tabindex="3" type="password" spellcheck="false" class="mdc-textfield__input"
+									data-bind="value: password, valueUpdate: 'afterkeydown'" />
+
+								<span class="mdc-textfield__label" data-bind="i18n: {'key': 'COREWEBCLIENT/LABEL_PASSWORD'}"></span>
+							</label>
+						</li>
+					</ul>
+
+<!--											<div class="item-content" data-bind="css: {'focused': loginFocus(), 'filled': login().length > 0, shake: shake()}">
+									<div class="item-media aurora-icons email"><i class="icon"></i></div>
+									<div class="item-inner">
+										<div class="item-input">
+											<input tabindex="1" name="login" type="text" spellcheck="false"
+												data-bind="value: login, hasfocus: loginFocus, valueUpdate: 'afterkeydown', i18n: {'key': 'COREWEBCLIENT/LABEL_LOGIN', 'type': 'placeholder'}" />
+										</div>
+									</div>
+								</div>-->
+
+<!--											<div class="item-content" data-bind="css: {'focused': passwordFocus(), 'filled': password().length > 0, shake: shake()}">
+									<div class="item-media aurora-icons password"><i class="icon"></i></div>
+									<div class="item-inner">
+										<div class="item-input">
+											<input tabindex="3" class="" name="password" type="password" spellcheck="false"
+												data-bind="value: password, hasfocus: passwordFocus, valueUpdate: 'afterkeydown', i18n: {'key': 'COREWEBCLIENT/LABEL_PASSWORD', 'type': 'placeholder'}" />
+										</div>
+									</div>
+								</div>-->
+
+
+					{%INCLUDE-START/Login-Before-Submit-Button/INCLUDE-END%}
+					<ul class="mdc-list">
+						<li class="mdc-list-item">
+							<button type="submit" tabindex="5" class="mdc-button mdc-button--raised mdc-button--primary login" 
+								data-bind="text: signInButtonText, command: loginCommand, disable: login().length === 0" id="selenium_login_signin_button"></button>
+						</li>
+					</ul>
+
+					<div class="row signme" data-bind="visible: bUseSignMe">
+						<span>
+							<label class="custom_checkbox" data-bind="css: {'checked': signMe, 'focus': signMeFocused}">
+								<span class="icon"></span>
+								<input id="signme" tabindex="4" type="checkbox" data-bind="checked: signMe, hasfocus: signMeFocused" />
+							</label>
+							<label class="signme_label" for="signme" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REMEMBER_ME'}"></label>
+						</span>
+					</div>
+					{%INCLUDE-START/Login-After/INCLUDE-END%}
+				</form>
+
+				<!--{%INCLUDE-START/Login-Before-Description/INCLUDE-END%}-->
+				<div class="description" data-bind="visible: sInfoText !== '', html: sInfoText"></div>
+				<!--{%INCLUDE-START/Login-After-Description/INCLUDE-END%}-->
+				
+				
+			</div>
+		</div>
+	</div>
+	
+	<!--{%INCLUDE-START/Login-Footer/INCLUDE-END%}-->
+	
+<!--	<div class="views">
 		<div class="view contacts-view">
 			<div class="pages">
 				<div class="page">
 					<div class="page-content">
 						<div class="content-block">
-							<!-- ko if: sCustomLogoUrl === '' --><span class="icon"></span><!-- /ko -->
-							<!-- ko if: sCustomLogoUrl !== '' --><img data-bind="attr: {'src': sCustomLogoUrl}"/><!-- /ko -->
 							
-							<div class="login-screen-title" data-bind="i18n: {'key': 'COREWEBCLIENT/HEADING_LOGIN'}"></div>
-							
-							<form action="#" autocomplete="on" onsubmit="return false;" data-bind="command: loginCommand">
-								<div class="list-block">
-									<ul>
-										<li>
-											<div class="item-content" data-bind="css: {'focused': loginFocus(), 'filled': login().length > 0, shake: shake()}">
-												<div class="item-media aurora-icons email"><i class="icon"></i></div>
-												<div class="item-inner">
-													<div class="item-input">
-														<input tabindex="1" name="login" type="text" spellcheck="false"
-															data-bind="value: login, hasfocus: loginFocus, valueUpdate: 'afterkeydown', i18n: {'key': 'COREWEBCLIENT/LABEL_LOGIN', 'type': 'placeholder'}" />
-													</div>
-												</div>
-											</div>
-										</li>
-										<li>
-											<div class="item-content" data-bind="css: {'focused': passwordFocus(), 'filled': password().length > 0, shake: shake()}">
-												<div class="item-media aurora-icons password"><i class="icon"></i></div>
-												<div class="item-inner">
-													<div class="item-input">
-														<input tabindex="3" class="" name="password" type="password" spellcheck="false"
-															data-bind="value: password, hasfocus: passwordFocus, valueUpdate: 'afterkeydown', i18n: {'key': 'COREWEBCLIENT/LABEL_PASSWORD', 'type': 'placeholder'}" />
-													</div>
-												</div>
-											</div>
-										</li>
-									</ul>								
-								</div>
-
-								{%INCLUDE-START/Login-Before-Submit-Button/INCLUDE-END%}
-								<p>
-									<button type="submit" tabindex="5" class="button button-fill login" data-bind="text: signInButtonText, command: loginCommand" id="selenium_login_signin_button"></button>
-								</p>
-
-								<div class="row signme" data-bind="visible: bUseSignMe">
-									<span>
-										<label class="custom_checkbox" data-bind="css: {'checked': signMe, 'focus': signMeFocused}">
-											<span class="icon"></span>
-											<input id="signme" tabindex="4" type="checkbox" data-bind="checked: signMe, hasfocus: signMeFocused" />
-										</label>
-										<label class="signme_label" for="signme" data-bind="i18n: {'key': '%MODULENAME%/LABEL_REMEMBER_ME'}"></label>
-									</span>
-								</div>
-								{%INCLUDE-START/Login-After/INCLUDE-END%}
-							</form>
-					
-					<!--{%INCLUDE-START/Login-Before-Description/INCLUDE-END%}-->
-					<div class="description" data-bind="visible: sInfoText !== '', html: sInfoText"></div>
-					<!--{%INCLUDE-START/Login-After-Description/INCLUDE-END%}-->
 					<div class="clear"></div>
 				</div>
 			</div>
 			
-			<!--{%INCLUDE-START/Login-Footer/INCLUDE-END%}-->
+			
 		</div>
-	</div>
+	</div>-->
 
 	
 </div>
