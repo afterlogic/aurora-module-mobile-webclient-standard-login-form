@@ -3,6 +3,8 @@
 
 module.exports = function (oAppData) {
 	var
+		Types = require('%PathToCoreWebclientModule%/js/utils/Types.js'),
+		
 		App = require('%PathToCoreWebclientModule%/js/App.js'),
 		ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
 		
@@ -26,11 +28,19 @@ module.exports = function (oAppData) {
 					ModulesManager = require('%PathToCoreWebclientModule%/js/ModulesManager.js'),
 					sHashModuleName = ModulesManager.run('StandardLoginFormWebclient', 'getHashModuleName')
 				;
-				oScreens[sHashModuleName] = function () {
-					var oLoginScreenView = ModulesManager.run('StandardLoginFormWebclient', 'getLoginScreenView');
-					oLoginScreenView.ViewTemplate = '%ModuleName%_LoginView';
-					return oLoginScreenView;
-				};
+				
+				if (Types.isNonEmptyString(sHashModuleName))
+				{
+					oScreens[sHashModuleName] = function () {
+						var oLoginScreenView = ModulesManager.run('StandardLoginFormWebclient', 'getLoginScreenView');
+						if (oLoginScreenView)
+						{
+							oLoginScreenView.ViewTemplate = '%ModuleName%_LoginView';
+						}
+						return oLoginScreenView;
+					};
+				}
+				
 				return oScreens;
 			}
 		};
