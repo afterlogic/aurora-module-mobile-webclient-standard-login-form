@@ -40,6 +40,9 @@
 								</div>
 
 								{%INCLUDE-START/Login-Before-Submit-Button/INCLUDE-END%}
+								<!-- ko foreach: beforeButtonsControllers -->
+									<!-- ko template: { name: $data.ViewTemplate, data: $data} --><!-- /ko -->
+								<!-- /ko -->
 								<p>
 									<button type="submit" tabindex="5" class="button button-fill login" data-bind="text: signInButtonText, command: loginCommand" id="selenium_login_signin_button"></button>
 								</p>
