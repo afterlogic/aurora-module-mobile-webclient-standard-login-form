@@ -21,10 +21,10 @@
 
 <script>
 import { ref, shallowRef, triggerRef } from 'vue'
-
 import { i18n } from 'src/boot/i18n'
+import _ from 'lodash'
 
-import appApi from 'src/api/index'
+import coreWebApi from 'src/api/core-web-api'
 import eventBus from 'src/event-bus'
 import notification from 'src/utils/notification'
 import store from 'src/store'
@@ -33,7 +33,6 @@ import AppInput from 'src/components/common/AppInput'
 import AppButton from 'src/components/common/AppButton'
 import AppCheckbox from 'src/components/common/AppCheckbox'
 import LoginLayout from 'src/views/layouts/LoginLayout'
-import _ from "lodash";
 
 export default {
   name: 'Login',
@@ -58,9 +57,9 @@ export default {
         Login: login.value,
         Password: password.value,
       }
-      const result = await appApi.user.login(parameters)
+      const result = await coreWebApi.login(parameters)
       if (result?.AuthToken) {
-        await store.dispatch('user/setAuthToken', result.AuthToken)
+        await store.dispatch('core/setAuthToken', result.AuthToken)
       } else if (result) {
         const params = {}
         eventBus.$emit('StandardLoginFormMobileWebclient::GetProcessLoginResultComponent', params)
@@ -69,6 +68,7 @@ export default {
             if (component?.default) {
               loginResult.value = result
               processLoginResultComponent.value = component.default
+              triggerRef(processLoginResultComponent)
             } else {
               notification.showError(i18n.global.tc('COREWEBCLIENT.ERROR_PASS_INCORRECT'))
             }
