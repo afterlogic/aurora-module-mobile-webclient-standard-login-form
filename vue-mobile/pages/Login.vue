@@ -32,7 +32,7 @@ import store from 'src/store'
 import AppInput from 'src/components/common/AppInput'
 import AppButton from 'src/components/common/AppButton'
 import AppCheckbox from 'src/components/common/AppCheckbox'
-import LoginLayout from 'src/views/layouts/LoginLayout'
+import LoginLayout from 'src/layouts/LoginLayout'
 
 export default {
   name: 'Login',

@@ -1,8 +1,8 @@
-// import typesUtils from 'src/utils/types'
+// import types from 'src/utils/types'
 
 class LoginSettings {
   constructor (appData) {
-    // const loginData = typesUtils.pObject(appData.StandardLoginFormWebclient)
+    // const loginData = types.pObject(appData.StandardLoginFormWebclient)
   }
 }
 
