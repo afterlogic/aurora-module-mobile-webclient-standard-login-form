@@ -1,9 +1,15 @@
 <template>
   <login-layout :subheading="$t('LOG IN TO CONTINUE')">
     <template v-if="processLoginResultComponent">
-      <component :is="processLoginResultComponent" :login="login" :password="password" :loginResult="loginResult"></component>
+      <component
+        :is="processLoginResultComponent"
+        :login="login"
+        :password="password"
+        :loginResult="loginResult"
+        @backToLogin="onBackToLogin"
+      />
     </template>
-    <template v-else >
+    <template v-else>
       <div class="full-width">
         <div class="page-body-login full-width">
           <q-form>
@@ -82,6 +88,11 @@ export default {
       loading.value = false
     }
 
+    const onBackToLogin = () => {
+      processLoginResultComponent.value = null
+      triggerRef(processLoginResultComponent)
+    }
+
     return {
       login,
       password,
@@ -89,6 +100,7 @@ export default {
       loginResult,
       processLoginResultComponent,
       proceedLogin,
+      onBackToLogin,
     }
   },
 }
