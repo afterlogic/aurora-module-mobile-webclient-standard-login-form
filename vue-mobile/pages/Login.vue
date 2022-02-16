@@ -1,5 +1,5 @@
 <template>
-  <login-layout :subheading="$t('LOG IN TO CONTINUE')">
+  <login-layout :subheading="$t('STANDARDLOGINFORMMOBILEWEBCLIENT.LABEL_LOGIN_TO_CONTINUE')">
     <template v-if="processLoginResultComponent">
       <component
         :is="processLoginResultComponent"
@@ -10,11 +10,11 @@
       />
     </template>
     <template v-else>
-      <div class="full-width">
-        <div class="page-body-login full-width">
+      <div class="full-width q-my-auto">
+        <div class="full-width">
           <q-form>
             <AppInput type="email" v-model="login" :placeholder="$t('COREWEBCLIENT.LABEL_EMAIL')" />
-            <AppInput type="password" v-model="password" placeholder="Password" />
+            <AppInput type="password" v-model="password" :placeholder="$t('COREWEBCLIENT.LABEL_PASSWORD')" />
           </q-form>
         </div>
       </div>
@@ -114,8 +114,5 @@ export default {
     font-size: 1.125rem;
     line-height: 1.25rem;
   }
-}
-.page-body-login {
-  padding-top: 9.25rem;
 }
 </style>
