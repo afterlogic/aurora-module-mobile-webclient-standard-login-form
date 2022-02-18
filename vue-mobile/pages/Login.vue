@@ -13,13 +13,26 @@
       <div class="full-width q-my-auto">
         <div class="full-width">
           <q-form>
-            <AppInput type="email" v-model="login" :placeholder="$t('COREWEBCLIENT.LABEL_EMAIL')" />
-            <AppInput type="password" v-model="password" :placeholder="$t('COREWEBCLIENT.LABEL_PASSWORD')" />
+            <q-input
+              class="login_input"
+              type="email"
+              v-model="login"
+              @keydown.enter="onProceedToPassword"
+              :placeholder="$t('COREWEBCLIENT.LABEL_EMAIL')"
+            />
+            <q-input
+              class="login_input"
+              ref="passwordInput"
+              type="password"
+              v-model="password"
+              @keydown.enter="onProceedToLogin"
+              :placeholder="$t('COREWEBCLIENT.LABEL_PASSWORD')"
+            />
           </q-form>
         </div>
       </div>
       <div class="q-pb-xl text-center">
-        <AppButton label="Login" :loading="loading" @click="proceedLogin" :disabled="!login || !password" />
+        <app-button label="Login" :loading="loading" @click="proceedLogin" :disabled="!login || !password" />
       </div>
     </template>
   </login-layout>
@@ -35,7 +48,6 @@ import eventBus from 'src/event-bus'
 import notification from 'src/utils/notification'
 import store from 'src/store'
 
-import AppInput from 'src/components/common/AppInput'
 import AppButton from 'src/components/common/AppButton'
 import AppCheckbox from 'src/components/common/AppCheckbox'
 import LoginLayout from 'src/layouts/LoginLayout'
@@ -46,7 +58,6 @@ export default {
   components: {
     LoginLayout,
     AppCheckbox,
-    AppInput,
     AppButton,
   },
 
@@ -55,6 +66,7 @@ export default {
     const password = ref('')
     const loginResult = ref(null)
     const loading = ref(false)
+    const passwordInput = ref(null)
     const processLoginResultComponent = shallowRef(null)
 
     const proceedLogin = async () => {
@@ -88,6 +100,16 @@ export default {
       loading.value = false
     }
 
+    const onProceedToPassword = () => {
+      if (!login.value) return;
+      passwordInput.value.focus()
+    }
+
+    const onProceedToLogin = () => {
+      if (!login.value || !password.value) return;
+      proceedLogin()
+    }
+
     const onBackToLogin = () => {
       processLoginResultComponent.value = null
       triggerRef(processLoginResultComponent)
@@ -97,22 +119,27 @@ export default {
       login,
       password,
       loading,
+      passwordInput,
       loginResult,
       processLoginResultComponent,
       proceedLogin,
+      onProceedToPassword,
+      onProceedToLogin,
       onBackToLogin,
     }
   },
 }
 </script>
 
-<style lang="scss" scoped>
-.two-factor {
-  padding-top: 6.25rem;
+<style lang="scss">
+.login_input .q-field__control:after {
+  transform: unset;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
 
-  &__heading {
-    font-size: 1.125rem;
-    line-height: 1.25rem;
-  }
+.login_input.q-field--highlighted .q-field__control:after {
+  opacity: 1;
+  transform: unset;
 }
 </style>
