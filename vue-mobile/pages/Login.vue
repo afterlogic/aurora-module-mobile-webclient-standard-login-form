@@ -32,7 +32,7 @@
         </div>
       </div>
       <div class="q-pb-xl text-center">
-        <app-button label="Login" :loading="loading" @click="proceedLogin" :disabled="!login || !password" />
+        <app-button :label="$t('COREWEBCLIENT.LABEL_LOGIN')" :loading="loading" @click="proceedLogin" :disabled="!login || !password" />
       </div>
     </template>
   </login-layout>
