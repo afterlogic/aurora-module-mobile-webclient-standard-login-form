@@ -46,7 +46,10 @@ import _ from 'lodash'
 import coreWebApi from 'src/api/core-web-api'
 import eventBus from 'src/event-bus'
 import notification from 'src/utils/notification'
-import store from 'src/store'
+// import store from 'src/store'
+import { useCoreStore } from 'src/stores/index-pinia'
+const coreStore = useCoreStore()
+
 
 import AppButton from 'src/components/common/AppButton'
 import AppCheckbox from 'src/components/common/AppCheckbox'
@@ -77,7 +80,8 @@ export default {
       }
       const result = await coreWebApi.login(parameters)
       if (result?.AuthToken) {
-        await store.dispatch('core/setAuthToken', result.AuthToken)
+        // await store.dispatch('core/setAuthToken', )
+        await coreStore.setAuthToken(result.AuthToken)
       } else if (result) {
         const params = {}
         eventBus.$emit('StandardLoginFormMobileWebclient::GetProcessLoginResultComponent', params)
