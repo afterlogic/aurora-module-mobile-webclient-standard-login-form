@@ -1,5 +1,5 @@
 <template>
-  <login-layout :subheading="$t('STANDARDLOGINFORMMOBILEWEBCLIENT.LABEL_LOGIN_TO_CONTINUE')">
+  <LoginLayout :subheading="$t('STANDARDLOGINFORMMOBILEWEBCLIENT.LABEL_LOGIN_TO_CONTINUE')">
     <template v-if="processLoginResultComponent">
       <component
         :is="processLoginResultComponent"
@@ -32,10 +32,10 @@
         </div>
       </div>
       <div class="q-pb-xl text-center">
-        <app-button :label="$t('COREWEBCLIENT.LABEL_LOGIN')" :loading="loading" @click="proceedLogin" :disabled="!login || !password" />
+        <AppButton :label="$t('COREWEBCLIENT.LABEL_LOGIN')" :loading="loading" @click="proceedLogin" :disabled="!login || !password" />
       </div>
     </template>
-  </login-layout>
+  </LoginLayout>
 </template>
 
 <script>
@@ -46,13 +46,11 @@ import _ from 'lodash'
 import coreWebApi from 'src/api/core-web-api'
 import eventBus from 'src/event-bus'
 import notification from 'src/utils/notification'
-// import store from 'src/store'
+
 import { useCoreStore } from 'src/stores/index-pinia'
 const coreStore = useCoreStore()
 
-
 import AppButton from 'src/components/common/AppButton'
-import AppCheckbox from 'src/components/common/AppCheckbox'
 import LoginLayout from 'src/layouts/LoginLayout'
 
 export default {
@@ -60,7 +58,6 @@ export default {
 
   components: {
     LoginLayout,
-    AppCheckbox,
     AppButton,
   },
 
