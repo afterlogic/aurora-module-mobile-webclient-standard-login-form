@@ -52,6 +52,11 @@
                 {{ $t('STANDARDRESETPASSWORD.ACTION_FORGOT_PASSWORD') }}
               </router-link>
             </div>
+            <component
+              v-for="(component, index) in beforeButtonsComponents"
+              :key="index"
+              :is="component"
+            />
           </q-form>
         </div>
       </div>
@@ -63,7 +68,7 @@
 </template>
 
 <script>
-import { ref, shallowRef, triggerRef, computed } from 'vue'
+import { ref, shallowRef, triggerRef, computed, onMounted } from 'vue'
 import { i18n } from 'src/boot/i18n'
 import _ from 'lodash'
 
@@ -94,9 +99,27 @@ export default {
     const passwordInput = ref(null)
     const isPasswordVisible = ref(false)
     const processLoginResultComponent = shallowRef(null)
+    const beforeButtonsComponents = shallowRef([])
 
     const showForgotPassword = computed(() => {
       return modulesManager.isModuleAvailable('StandardResetPassword')
+    })
+
+    const loadBeforeButtonsComponents = async () => {
+      const params = {}
+      eventBus.$emit('StandardLoginFormMobileWebclient::GetBeforeButtonsComponents', params)
+      if (!_.isArray(params.beforeButtonsComponents) || params.beforeButtonsComponents.length === 0) {
+        beforeButtonsComponents.value = []
+        return
+      }
+
+      const components = await Promise.all(params.beforeButtonsComponents.map((loader) => loader()))
+      beforeButtonsComponents.value = components.map((component) => component.default).filter(Boolean)
+      triggerRef(beforeButtonsComponents)
+    }
+
+    onMounted(() => {
+      loadBeforeButtonsComponents()
     })
 
     const proceedLogin = async () => {
@@ -105,9 +128,20 @@ export default {
         Login: login.value,
         Password: password.value,
       }
-      const result = await coreWebApi.login(parameters)
+      const populateParams = {
+        Module: 'StandardLoginFormMobileWebclient',
+        Parameters: parameters,
+      }
+      eventBus.$emit('AnonymousUserForm::PopulateFormSubmitParameters', populateParams)
+      if (populateParams.Reject) {
+        notification.showError(i18n.global.tc('COREWEBCLIENT.ERROR_CAPTCHA_IS_INCORRECT'))
+        loading.value = false
+        return
+      }
+
+      const result = await coreWebApi.login(populateParams.Parameters)
       if (result?.AuthToken) {
-        // await store.dispatch('core/setAuthToken', )
+        eventBus.$emit('AnonymousUserForm::LoginSucceed', { ModuleName: 'StandardLoginFormMobileWebclient' })
         await coreStore.setAuthToken(result.AuthToken)
       } else if (result) {
         const params = {}
@@ -119,14 +153,19 @@ export default {
               processLoginResultComponent.value = component.default
               triggerRef(processLoginResultComponent)
             } else {
+              eventBus.$emit('AnonymousUserForm::LoginFailed', { ModuleName: 'StandardLoginFormMobileWebclient' })
               notification.showError(i18n.global.tc('COREWEBCLIENT.ERROR_PASS_INCORRECT'))
             }
           }, () => {
+            eventBus.$emit('AnonymousUserForm::LoginFailed', { ModuleName: 'StandardLoginFormMobileWebclient' })
             notification.showError(i18n.global.tc('COREWEBCLIENT.ERROR_PASS_INCORRECT'))
           })
         } else {
+          eventBus.$emit('AnonymousUserForm::LoginFailed', { ModuleName: 'StandardLoginFormMobileWebclient' })
           notification.showError(i18n.global.tc('COREWEBCLIENT.ERROR_PASS_INCORRECT'))
         }
+      } else {
+        eventBus.$emit('AnonymousUserForm::LoginFailed', { ModuleName: 'StandardLoginFormMobileWebclient' })
       }
       loading.value = false
     }
@@ -155,6 +194,7 @@ export default {
       showForgotPassword,
       loginResult,
       processLoginResultComponent,
+      beforeButtonsComponents,
       proceedLogin,
       onProceedToPassword,
       onProceedToLogin,
