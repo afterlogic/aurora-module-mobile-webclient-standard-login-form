@@ -15,6 +15,7 @@
           <q-form>
             <q-input
               class="login_input"
+              data-test-id="login-email"
               type="email"
               v-model="login"
               @keydown.enter="onProceedToPassword"
@@ -26,6 +27,7 @@
             </q-input>
             <q-input
               class="login_input"
+              data-test-id="login-password"
               ref="passwordInput"
               :type="isPasswordVisible ? 'text' : 'password'"
               v-model="password"
@@ -61,7 +63,13 @@
         </div>
       </div>
       <div class="q-pb-xl text-center">
-        <AppButton label="LOGIN" :loading="loading" @click="proceedLogin" :disabled="!login || !password" />
+        <AppButton
+          data-test-id="login-submit"
+          label="LOGIN"
+          :loading="loading"
+          @click="proceedLogin"
+          :disabled="!login || !password"
+        />
       </div>
     </template>
   </LoginLayout>
