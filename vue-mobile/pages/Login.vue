@@ -39,6 +39,7 @@
               </template>
               <template v-slot:append>
                 <q-icon
+                  data-test-id="login-password-toggle"
                   :name="isPasswordVisible ? 'visibility' : 'visibility_off'"
                   color="grey-5"
                   class="cursor-pointer"
@@ -50,7 +51,10 @@
               v-if="showForgotPassword"
               class="login_forgot q-mt-sm text-right"
             >
-              <router-link :to="{ name: 'reset-password' }">
+              <router-link
+                data-test-id="login-forgot-password"
+                :to="{ name: 'reset-password' }"
+              >
                 {{ $t('STANDARDRESETPASSWORD.ACTION_FORGOT_PASSWORD') }}
               </router-link>
             </div>
