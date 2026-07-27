@@ -8,5 +8,5 @@ yarn test:e2e_local:iphone
 yarn test:e2e_local -- --project="StandardLoginFormMobileWebclient · iPhone 13"
 ```
 
-Shared helpers: Core `e2e/helpers/` (`AURORA_MOBILE_E2E_ROOT`).
+Shared helpers: Core `test/e2e/helpers/` (`AURORA_MOBILE_E2E_ROOT`).
 Domain helpers: `./helpers/` here.
