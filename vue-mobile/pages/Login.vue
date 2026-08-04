@@ -69,7 +69,8 @@
       <div class="q-pb-xl text-center">
         <AppButton
           data-test-id="login-submit"
-          label="LOGIN"
+          class="text-uppercase"
+          :label="$t('COREWEBCLIENT.LABEL_LOGIN')"
           :loading="loading"
           @click="proceedLogin"
           :disabled="!login || !password"
@@ -217,6 +218,9 @@ export default {
 </script>
 
 <style lang="scss">
+$login-autofill-bg: #e8f0fe;
+$login-autofill-icon: #5f6368;
+
 .login_input .q-field__control:after {
   transform: unset;
   opacity: 0;
@@ -226,6 +230,34 @@ export default {
 .login_input.q-field--highlighted .q-field__control:after {
   opacity: 1;
   transform: unset;
+}
+
+// Chrome paints autofill only on the native input; cover the whole Quasar field.
+.login_input:has(.q-field__native:-webkit-autofill) {
+  .q-field__control {
+    background-color: $login-autofill-bg;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .q-field__control:before,
+  .q-field__control:after {
+    z-index: 1;
+  }
+
+  .q-field__prepend .q-icon,
+  .q-field__append .q-icon {
+    color: $login-autofill-icon !important;
+  }
+}
+
+.login_input .q-field__native:-webkit-autofill,
+.login_input .q-field__native:-webkit-autofill:hover,
+.login_input .q-field__native:-webkit-autofill:focus,
+.login_input .q-field__native:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px $login-autofill-bg inset !important;
+  -webkit-text-fill-color: inherit;
+  caret-color: auto;
+  transition: background-color 99999s ease-out;
 }
 
 .login_forgot a {
