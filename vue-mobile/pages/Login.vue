@@ -40,7 +40,7 @@
               <template v-slot:append>
                 <q-icon
                   data-test-id="login-password-toggle"
-                  :name="isPasswordVisible ? 'visibility' : 'visibility_off'"
+                  :name="isPasswordVisible ? 'visibility_off' : 'visibility'"
                   color="grey-5"
                   class="cursor-pointer"
                   @click="isPasswordVisible = !isPasswordVisible"
