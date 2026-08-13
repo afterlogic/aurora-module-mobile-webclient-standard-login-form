@@ -9,12 +9,12 @@ Full docs (run / UI Mode / filters / env):
 
 ```bash
 # from Aurora install root
-yarn test:e2e-mobile -- --setup "StandardLoginFormMobileWebclient iPhone13"
-yarn test:e2e-mobile:ui -- --setup "StandardLoginFormMobileWebclient iPhone13"
+npm run test:e2e-mobile -- --setup "StandardLoginFormMobileWebclient iPhone13"
+npm run test:e2e-mobile:ui -- --setup "StandardLoginFormMobileWebclient iPhone13"
 
 # from modules/CoreMobileWebclient/vue-mobile
-yarn test:e2e_local -- --setup "StandardLoginFormMobileWebclient iPhone13"
-yarn test:e2e:ui -- --setup "StandardLoginFormMobileWebclient iPhone13"
+npm run test:e2e -- --setup "StandardLoginFormMobileWebclient iPhone13"
+npm run test:e2e:ui -- --setup "StandardLoginFormMobileWebclient iPhone13"
 ```
 
 `--setup "<modules> <devices>"` (like desktop). Comma-separate multiple modules/devices.
