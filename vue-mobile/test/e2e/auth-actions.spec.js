@@ -25,7 +25,7 @@ test.describe('Mobile auth', () => {
 
     await step('Open login page', async () => {
       await page.context().clearCookies()
-      await page.goto('/', { waitUntil: 'domcontentloaded' })
+      await page.goto('', { waitUntil: 'domcontentloaded' })
       await expect(page.getByTestId('login-email')).toBeVisible({
         timeout: 30000,
       })
@@ -100,7 +100,7 @@ test.describe('Mobile auth', () => {
 
     await step('Open login page', async () => {
       await page.context().clearCookies()
-      await page.goto('/', { waitUntil: 'domcontentloaded' })
+      await page.goto('', { waitUntil: 'domcontentloaded' })
       await expect(page.getByTestId('login-email')).toBeVisible({
         timeout: 30000,
       })
@@ -170,7 +170,7 @@ test.describe('Mobile auth', () => {
 
     await step('Open login and type password', async () => {
       await page.context().clearCookies()
-      await page.goto('/', { waitUntil: 'domcontentloaded' })
+      await page.goto('', { waitUntil: 'domcontentloaded' })
       await expect(page.getByTestId('login-email')).toBeVisible({
         timeout: 30000,
       })

@@ -9,7 +9,7 @@ const { step } = sharedHelper('login')
 test.describe('Mobile login page', () => {
   test('shows login form', async ({ page }) => {
     await step('Open mobile URL', async () => {
-      await page.goto('/')
+      await page.goto('')
     })
 
     await step('Expect login form fields', async () => {
