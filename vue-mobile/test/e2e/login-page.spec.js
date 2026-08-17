@@ -3,7 +3,7 @@ const { sharedHelper, moduleHelper, fixturePath } = require(path.join(
   process.env.AURORA_MOBILE_E2E_ROOT,
   'test/e2e/helpers/paths'
 ))
-const { test, expect } = require('@playwright/test')
+const { test, expect } = sharedHelper('fixtures')
 const { step } = sharedHelper('login')
 
 test.describe('Mobile login page', () => {
