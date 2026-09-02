@@ -9,6 +9,7 @@ const {
   step,
   attachScreenshot,
   fieldControl,
+  armAppDataResponse,
   waitForTurnstileToken,
 } = sharedHelper('login')
 const { clickReady } = sharedHelper('ready')
@@ -23,13 +24,18 @@ test.describe('Mobile auth', () => {
     test.setTimeout(120000)
     const login = process.env.E2E_LOGIN
 
+    // Arm before goto() — GetAppData fires on app mount and is how the helper
+    // learns whether the Turnstile plugin is active (mobile has no inlined
+    // window.auroraAppData). Without it the wait can't gate on the feature.
+    const appDataResponsePromise = armAppDataResponse(page)
+
     await step('Open login page', async () => {
       await page.context().clearCookies()
       await page.goto('', { waitUntil: 'domcontentloaded' })
       await expect(page.getByTestId('login-email')).toBeVisible({
         timeout: 30000,
       })
-      await waitForTurnstileToken(page)
+      await waitForTurnstileToken(page, appDataResponsePromise)
     })
 
     await step('Submit wrong password', async () => {
@@ -37,7 +43,7 @@ test.describe('Mobile auth', () => {
       await fieldControl(page, 'login-password').fill(
         `wrong-password-${Date.now()}`
       )
-      await waitForTurnstileToken(page)
+      await waitForTurnstileToken(page, appDataResponsePromise)
       await expect(page.getByTestId('login-submit')).toBeEnabled({
         timeout: 10000,
       })
@@ -149,6 +155,8 @@ test.describe('Mobile auth', () => {
     })
 
     await step('Login again with same credentials', async () => {
+      // Gates on the GetAppData response armed by loginAsTestUser above
+      // (cached per page), so this still no-ops when Turnstile is off.
       await waitForTurnstileToken(page)
       await fieldControl(page, 'login-email').fill(process.env.E2E_LOGIN)
       await fieldControl(page, 'login-password').fill(process.env.E2E_PASSWORD)
