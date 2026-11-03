@@ -66,7 +66,10 @@
           </q-form>
         </div>
       </div>
-      <div class="q-pb-xl text-center">
+      <div
+        class="text-center"
+        :class="bottomInfoHtmlText ? 'q-mb-md' : 'q-pb-xl'"
+      >
         <AppButton
           data-test-id="login-submit"
           class="text-uppercase"
@@ -75,7 +78,19 @@
           @click="proceedLogin"
           :disabled="!login || !password"
         />
+        <div
+          v-if="infoText"
+          data-test-id="login-info-text"
+          class="login_info"
+          v-html="infoText"
+        />
       </div>
+      <div
+        v-if="bottomInfoHtmlText"
+        data-test-id="login-bottom-info"
+        class="login_bottom_info"
+        v-html="bottomInfoHtmlText"
+      />
     </template>
   </LoginLayout>
 </template>
@@ -95,6 +110,7 @@ const coreStore = useCoreStore()
 
 import AppButton from 'src/components/common/AppButton'
 import LoginLayout from 'src/layouts/LoginLayout'
+import settings from '../settings'
 
 export default {
   name: 'Login',
@@ -105,8 +121,10 @@ export default {
   },
 
   setup() {
-    const login = ref('')
-    const password = ref('')
+    const login = ref(settings.getSetting('demoLogin') || '')
+    const password = ref(settings.getSetting('demoPassword') || '')
+    const infoText = settings.getSetting('infoText') || ''
+    const bottomInfoHtmlText = settings.getSetting('bottomInfoHtmlText') || ''
     const loginResult = ref(null)
     const loading = ref(false)
     const passwordInput = ref(null)
@@ -201,6 +219,8 @@ export default {
     return {
       login,
       password,
+      infoText,
+      bottomInfoHtmlText,
       loading,
       passwordInput,
       isPasswordVisible,
@@ -264,5 +284,33 @@ $login-autofill-icon: #5f6368;
   color: var(--q-primary);
   text-decoration: none;
   font-size: 0.875rem;
+}
+
+.login_info {
+  margin-top: 12px;
+  color: #9e9e9e;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.login_bottom_info {
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  color: #9e9e9e;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.login_info a,
+.login_bottom_info a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.login_info p,
+.login_bottom_info p {
+  margin: 0;
 }
 </style>
